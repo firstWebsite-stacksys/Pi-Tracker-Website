@@ -365,7 +365,53 @@
 
         function setState(newState) {
             state = { ...state, ...newState };
-            render();
+            
+            // Only update the numbers, not the whole page
+            if (state.gameStarted) {
+                const currentStreakEl = document.getElementById('current-streak');
+                const bestScoreEl = document.getElementById('best-score');
+                
+                if (currentStreakEl) currentStreakEl.textContent = state.currentStreak;
+                if (bestScoreEl) bestScoreEl.textContent = state.bestScore;
+                
+                // Handle error box and hint box
+                const errorContainer = document.getElementById('error-container');
+                const hintContainer = document.getElementById('hint-container');
+                const inputBox = document.getElementById('input-box');
+                
+                if (errorContainer) {
+                    errorContainer.innerHTML = state.mistake ? `
+                        <div class="error-box">
+                            <div class="error-title">Oops! Wrong digit</div>
+                            <div class="error-text">
+                                The next digit is: <span class="error-digit">${PI_DIGITS[state.input.length]}</span>
+                            </div>
+                            <button class="button button-danger" onclick="handleContinue()">
+                                Continue with this digit (or press Enter)
+                            </button>
+                        </div>
+                    ` : '';
+                }
+                
+                if (hintContainer) {
+                    hintContainer.innerHTML = state.showHint ? `
+                        <div class="hint-box">
+                            <div class="hint-label">Next 10 digits:</div>
+                            <div class="hint-digits">${getNextDigits()}</div>
+                        </div>
+                    ` : '';
+                }
+                
+                if (inputBox) {
+                    if (state.mistake) {
+                        inputBox.classList.add('error');
+                    } else {
+                        inputBox.classList.remove('error');
+                    }
+                }
+            } else {
+                render();
+            }
         }
 
         function handleStart() {
@@ -375,6 +421,7 @@
                 currentStreak: 0,
                 mistake: false
             });
+            render();
             setTimeout(() => document.getElementById('input')?.focus(), 100);
         }
 
@@ -540,12 +587,14 @@
 
         function render() {
             const app = document.getElementById('app');
+            
             app.innerHTML = state.gameStarted ? renderGameScreen() : renderStartScreen();
             
             const input = document.getElementById('input');
             if (input) {
                 input.addEventListener('input', handleInput);
                 input.addEventListener('keydown', handleKeyDown);
+                input.focus();
             }
         }
 
