@@ -4,601 +4,265 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>π Digits Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-            padding: 48px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .title {
-            font-size: 48px;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 32px;
-            font-size: 16px;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .info-title {
-            font-weight: 600;
-            color: #4338ca;
-            margin-bottom: 12px;
-            font-size: 18px;
-        }
-
-        .info-list {
-            color: #4338ca;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .info-list li {
-            margin-bottom: 8px;
-        }
-
-        .score-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .score-label {
-            font-weight: 600;
-            color: #78350f;
-        }
-
-        .score-value {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .score-number {
-            font-size: 32px;
-            font-weight: 800;
-            color: #b45309;
-        }
-
-        .score-text {
-            color: #78350f;
-            font-size: 14px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            padding: 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-        }
-
-        .stat-card.highlight {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6b21a8;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .stat-card.highlight .stat-label {
-            color: #78350f;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 800;
-            color: #7c3aed;
-        }
-
-        .stat-card.highlight .stat-value {
-            color: #b45309;
-        }
-
-        .input-box {
-            background: #f9fafb;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .input-box.error {
-            border-color: #ef4444;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .input-label {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 16px;
-            font-size: 24px;
-            font-family: 'Courier New', monospace;
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .input-field:focus {
-            border-color: #667eea;
-        }
-
-        .error-box {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            border: 2px solid #ef4444;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .error-title {
-            color: #991b1b;
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .error-text {
-            color: #dc2626;
-            margin-bottom: 12px;
-        }
-
-        .error-digit {
-            font-size: 32px;
-            font-family: 'Courier New', monospace;
-            font-weight: 800;
-            color: #991b1b;
-        }
-
-        .hint-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            animation: slideDown 0.3s ease;
-        }
-
-        .hint-label {
-            color: #1e40af;
-            font-size: 14px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .hint-digits {
-            font-size: 24px;
-            font-family: 'Courier New', monospace;
-            font-weight: 800;
-            color: #2563eb;
-            letter-spacing: 2px;
-        }
-
-        .button {
-            width: 100%;
-            padding: 16px 24px;
-            font-size: 18px;
-            font-weight: 700;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 12px;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .button-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .button-secondary {
-            background: #6b7280;
-            color: white;
-        }
-
-        .button-danger {
-            background: #ef4444;
-            color: white;
-        }
-
-        .button-info {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: #6b7280;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .back-button:hover {
-            color: #374151;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .header-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #1f2937;
-        }
-
-        .fun-fact {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px;
-            color: white;
-            margin-top: 24px;
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .fun-fact-title {
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .fun-fact-text {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .game-container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .trophy {
-            font-size: 28px;
         }
     </style>
 </head>
-<body>
+<body class="antialiased">
     <div id="app"></div>
 
-    <script>
-        const PI_DIGITS = "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
-        
-        let state = {
-            input: '',
-            bestScore: parseInt(localStorage.getItem('piBestScore') || '0'),
-            currentStreak: 0,
-            showHint: false,
-            gameStarted: false,
-            mistake: false
-        };
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 
-        function setState(newState) {
-            state = { ...state, ...newState };
-            
-            // Only update the numbers, not the whole page
-            if (state.gameStarted) {
-                const currentStreakEl = document.getElementById('current-streak');
-                const bestScoreEl = document.getElementById('best-score');
-                
-                if (currentStreakEl) currentStreakEl.textContent = state.currentStreak;
-                if (bestScoreEl) bestScoreEl.textContent = state.bestScore;
-                
-                // Handle error box and hint box
-                const errorContainer = document.getElementById('error-container');
-                const hintContainer = document.getElementById('hint-container');
-                const inputBox = document.getElementById('input-box');
-                
-                if (errorContainer) {
-                    errorContainer.innerHTML = state.mistake ? `
-                        <div class="error-box">
-                            <div class="error-title">Oops! Wrong digit</div>
-                            <div class="error-text">
-                                The next digit is: <span class="error-digit">${PI_DIGITS[state.input.length]}</span>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const PI_DIGITS = "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
+
+        const PiDigitsTracker = () => {
+            const [input, setInput] = useState('');
+            const [bestScore, setBestScore] = useState(0);
+            const [currentStreak, setCurrentStreak] = useState(0);
+            const [showHint, setShowHint] = useState(false);
+            const [gameStarted, setGameStarted] = useState(false);
+            const [mistake, setMistake] = useState(false);
+            const inputRef = useRef(null);
+
+            useEffect(() => {
+                const saved = parseInt(localStorage.getItem('piBestScore') || '0');
+                setBestScore(saved);
+            }, []);
+
+            const handleStart = () => {
+                setGameStarted(true);
+                setInput('');
+                setCurrentStreak(0);
+                setMistake(false);
+                setTimeout(() => inputRef.current?.focus(), 100);
+            };
+
+            const handleReset = () => {
+                setInput('');
+                setCurrentStreak(0);
+                setMistake(false);
+                inputRef.current?.focus();
+            };
+
+            const handleInput = (e) => {
+                const value = e.target.value;
+                const lastChar = value[value.length - 1];
+
+                if (lastChar && !/[0-9.]/.test(lastChar)) return;
+
+                if (PI_DIGITS.startsWith(value)) {
+                    setInput(value);
+                    setMistake(false);
+
+                    const digitCount = value.replace('.', '').length;
+                    setCurrentStreak(digitCount);
+
+                    if (digitCount > bestScore) {
+                        setBestScore(digitCount);
+                        localStorage.setItem('piBestScore', digitCount.toString());
+                    }
+                } else {
+                    setMistake(true);
+                }
+            };
+
+            const handleContinue = () => {
+                setInput('');
+                setCurrentStreak(0);
+                setMistake(false);
+                inputRef.current?.focus();
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter' && mistake) {
+                    e.preventDefault();
+                    handleContinue();
+                }
+            };
+
+            const getNextDigits = (count = 10) => {
+                const start = input.length;
+                return PI_DIGITS.slice(start, start + count);
+            };
+
+            const Trophy = () => (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                </svg>
+            );
+
+            const RotateCcw = () => (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                </svg>
+            );
+
+            const Eye = () => (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            );
+
+            const EyeOff = () => (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                    <line x1="2" x2="22" y1="2" y2="22"></line>
+                </svg>
+            );
+
+            if (!gameStarted) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full">
+                            <div className="text-center mb-8">
+                                <h1 className="text-5xl font-bold text-gray-800 mb-2">π Digits Tracker</h1>
+                                <p className="text-gray-600">Practice memorizing the digits of pi at your own pace</p>
                             </div>
-                            <button class="button button-danger" onclick="handleContinue()">
-                                Continue with this digit (or press Enter)
+
+                            <div className="bg-blue-50 rounded-xl p-6 mb-6">
+                                <h2 className="font-semibold text-gray-800 mb-3">How to play:</h2>
+                                <ul className="text-gray-700 space-y-2 text-sm">
+                                    <li>• Type the digits of π starting from 3.14159...</li>
+                                    <li>• No time pressure - go at your own pace</li>
+                                    <li>• Use the hint button if you get stuck</li>
+                                    <li>• Track your best score and keep improving!</li>
+                                </ul>
+                            </div>
+
+                            <div className="flex items-center justify-between mb-6 bg-purple-50 rounded-xl p-4">
+                                <span className="text-gray-700 font-medium">Personal Best</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="text-yellow-500"><Trophy /></div>
+                                    <span className="text-2xl font-bold text-purple-600">{bestScore}</span>
+                                    <span className="text-gray-600">digits</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleStart}
+                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg"
+                            >
+                                Start Practicing
                             </button>
                         </div>
-                    ` : '';
-                }
-                
-                if (hintContainer) {
-                    hintContainer.innerHTML = state.showHint ? `
-                        <div class="hint-box">
-                            <div class="hint-label">Next 10 digits:</div>
-                            <div class="hint-digits">${getNextDigits()}</div>
-                        </div>
-                    ` : '';
-                }
-                
-                if (inputBox) {
-                    if (state.mistake) {
-                        inputBox.classList.add('error');
-                    } else {
-                        inputBox.classList.remove('error');
-                    }
-                }
-            } else {
-                render();
-            }
-        }
-
-        function handleStart() {
-            setState({
-                gameStarted: true,
-                input: '',
-                currentStreak: 0,
-                mistake: false
-            });
-            render();
-            setTimeout(() => document.getElementById('input')?.focus(), 100);
-        }
-
-        function handleReset() {
-            setState({
-                input: '',
-                currentStreak: 0,
-                mistake: false
-            });
-            document.getElementById('input')?.focus();
-        }
-
-        function handleInput(e) {
-            const value = e.target.value;
-            const lastChar = value[value.length - 1];
-
-            if (lastChar && !/[0-9.]/.test(lastChar)) return;
-
-            if (PI_DIGITS.startsWith(value)) {
-                const digitCount = value.replace('.', '').length;
-                
-                if (digitCount > state.bestScore) {
-                    localStorage.setItem('piBestScore', digitCount.toString());
-                    setState({
-                        input: value,
-                        mistake: false,
-                        currentStreak: digitCount,
-                        bestScore: digitCount
-                    });
-                } else {
-                    setState({
-                        input: value,
-                        mistake: false,
-                        currentStreak: digitCount
-                    });
-                }
-            } else {
-                setState({ mistake: true });
-            }
-        }
-
-        function handleContinue() {
-            setState({
-                input: '',
-                currentStreak: 0,
-                mistake: false
-            });
-            document.getElementById('input')?.focus();
-        }
-
-        function handleKeyDown(e) {
-            if (e.key === 'Enter' && state.mistake) {
-                e.preventDefault();
-                handleContinue();
-            }
-        }
-
-        function getNextDigits(count = 10) {
-            const start = state.input.length;
-            return PI_DIGITS.slice(start, start + count);
-        }
-
-        function renderStartScreen() {
-            return `
-                <div class="container">
-                    <h1 class="title">π Digits Tracker</h1>
-                    <p class="subtitle">Practice memorizing the digits of pi at your own pace</p>
-                    
-                    <div class="info-box">
-                        <div class="info-title">How to play:</div>
-                        <ul class="info-list">
-                            <li>• Type the digits of π starting from 3.14159...</li>
-                            <li>• No time pressure - go at your own pace</li>
-                            <li>• Use the hint button if you get stuck</li>
-                            <li>• Track your best score and keep improving!</li>
-                        </ul>
                     </div>
+                );
+            }
 
-                    <div class="score-box">
-                        <span class="score-label">Personal Best</span>
-                        <div class="score-value">
-                            <span class="trophy">🏆</span>
-                            <span class="score-number">${state.bestScore}</span>
-                            <span class="score-text">digits</span>
-                        </div>
-                    </div>
-
-                    <button class="button button-primary" onclick="handleStart()">
-                        Start Practicing
-                    </button>
-                </div>
-            `;
-        }
-
-        function renderGameScreen() {
-            return `
-                <div class="game-container">
-                    <div class="container">
-                        <div class="header">
-                            <h1 class="header-title">π Digits Tracker</h1>
-                            <button class="back-button" onclick="setState({ gameStarted: false })">← Back</button>
-                        </div>
-
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-label">Current Streak</div>
-                                <div class="stat-value">${state.currentStreak}</div>
-                            </div>
-                            <div class="stat-card highlight">
-                                <div class="stat-label">🏆 Personal Best</div>
-                                <div class="stat-value">${state.bestScore}</div>
-                            </div>
-                        </div>
-
-                        <div class="input-box ${state.mistake ? 'error' : ''}">
-                            <div class="input-label">Type the digits of π:</div>
-                            <input
-                                id="input"
-                                type="text"
-                                class="input-field"
-                                value="${state.input}"
-                                placeholder="3.14159..."
-                                autocomplete="off"
-                            />
-                        </div>
-
-                        ${state.mistake ? `
-                            <div class="error-box">
-                                <div class="error-title">Oops! Wrong digit</div>
-                                <div class="error-text">
-                                    The next digit is: <span class="error-digit">${PI_DIGITS[state.input.length]}</span>
-                                </div>
-                                <button class="button button-danger" onclick="handleContinue()">
-                                    Continue with this digit (or press Enter)
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 p-4">
+                    <div className="max-w-4xl mx-auto pt-8">
+                        <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
+                            <div className="flex justify-between items-center mb-6">
+                                <h1 className="text-3xl font-bold text-gray-800">π Digits Tracker</h1>
+                                <button
+                                    onClick={() => setGameStarted(false)}
+                                    className="text-gray-600 hover:text-gray-800 font-medium"
+                                >
+                                    ← Back
                                 </button>
                             </div>
-                        ` : ''}
 
-                        ${state.showHint ? `
-                            <div class="hint-box">
-                                <div class="hint-label">Next 10 digits:</div>
-                                <div class="hint-digits">${getNextDigits()}</div>
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                                <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
+                                    <div className="text-purple-700 text-sm mb-1">Current Streak</div>
+                                    <div className="text-3xl font-bold text-purple-600">{currentStreak}</div>
+                                </div>
+                                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4">
+                                    <div className="text-yellow-700 text-sm mb-1 flex items-center gap-2">
+                                        <Trophy />
+                                        Personal Best
+                                    </div>
+                                    <div className="text-3xl font-bold text-yellow-600">{bestScore}</div>
+                                </div>
                             </div>
-                        ` : ''}
 
-                        <div class="button-group">
-                            <button class="button button-secondary" onclick="handleReset()">
-                                🔄 Reset
-                            </button>
-                            <button class="button button-info" onclick="setState({ showHint: !state.showHint })">
-                                ${state.showHint ? '👁️ Hide' : '👁️ Show'} Hint
-                            </button>
+                            <div className={`bg-gray-50 rounded-xl p-6 mb-4 transition-all ${mistake ? 'ring-4 ring-red-400' : ''}`}>
+                                <div className="text-gray-600 text-sm mb-2">Type the digits of π:</div>
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={input}
+                                    onChange={handleInput}
+                                    onKeyDown={handleKeyDown}
+                                    className="w-full text-2xl font-mono p-4 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+                                    placeholder="3.14159..."
+                                    autoComplete="off"
+                                />
+                            </div>
+
+                            {mistake && (
+                                <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4 mb-4">
+                                    <div className="text-red-700 font-semibold mb-2">Oops! Wrong digit</div>
+                                    <div className="text-red-600 mb-3">
+                                        The next digit is: <span className="text-2xl font-mono font-bold">{PI_DIGITS[input.length]}</span>
+                                    </div>
+                                    <button
+                                        onClick={handleContinue}
+                                        className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition-all"
+                                    >
+                                        Continue with this digit (or press Enter)
+                                    </button>
+                                </div>
+                            )}
+
+                            {showHint && (
+                                <div className="bg-blue-50 rounded-xl p-4 mb-4">
+                                    <div className="text-blue-700 text-sm mb-2">Next 10 digits:</div>
+                                    <div className="text-2xl font-mono font-bold text-blue-600">{getNextDigits()}</div>
+                                </div>
+                            )}
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleReset}
+                                    className="flex-1 bg-gray-600 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <RotateCcw />
+                                    Reset
+                                </button>
+                                <button
+                                    onClick={() => setShowHint(!showHint)}
+                                    className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+                                >
+                                    {showHint ? <EyeOff /> : <Eye />}
+                                    {showHint ? 'Hide' : 'Show'} Hint
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-white text-sm">
+                            <div className="font-semibold mb-2">Did you know?</div>
+                            <div>π is an irrational number with infinite non-repeating digits. People have memorized over 70,000 digits!</div>
                         </div>
                     </div>
-
-                    <div class="fun-fact">
-                        <div class="fun-fact-title">Did you know?</div>
-                        <div class="fun-fact-text">π is an irrational number with infinite non-repeating digits. People have memorized over 70,000 digits!</div>
-                    </div>
                 </div>
-            `;
-        }
+            );
+        };
 
-        function render() {
-            const app = document.getElementById('app');
-            
-            app.innerHTML = state.gameStarted ? renderGameScreen() : renderStartScreen();
-            
-            const input = document.getElementById('input');
-            if (input) {
-                input.addEventListener('input', handleInput);
-                input.addEventListener('keydown', handleKeyDown);
-                input.focus();
-            }
-        }
-
-        render();
+        ReactDOM.render(<PiDigitsTracker />, document.getElementById('app'));
     </script>
 </body>
 </html>
